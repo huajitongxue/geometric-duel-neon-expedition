@@ -1,0 +1,454 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    position: fixed;
+    background: #050505;
+    color: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+button {
+    font: inherit;
+}
+
+#gameCanvas {
+    display: block;
+    width: 100vw;
+    height: 100vh;
+    background: #0a0a0a;
+}
+
+#ui {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 5;
+    width: 100%;
+    padding: 12px 20px;
+    pointer-events: none;
+}
+
+.health-bar-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.player-info {
+    flex: 1;
+    max-width: 260px;
+}
+
+.player-name {
+    margin-bottom: 6px;
+    font-size: 13px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.player-name-human {
+    color: #ff4080;
+}
+
+.player-name-ai {
+    color: #40ffaa;
+}
+
+.health-bar {
+    position: relative;
+    height: 16px;
+    overflow: hidden;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 8px;
+}
+
+.health-fill {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    transition: width 0.3s;
+}
+
+.health-fill-human {
+    background: linear-gradient(90deg, #ff0040, #ff4080);
+}
+
+.health-fill-ai {
+    background: linear-gradient(90deg, #00ff88, #40ffaa);
+}
+
+.health-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    font-size: 10px;
+    font-weight: 700;
+    text-shadow: 0 0 2px #000;
+    transform: translate(-50%, -50%);
+}
+
+#timer {
+    min-width: 64px;
+    color: #ffff00;
+    font-size: 30px;
+    font-weight: 700;
+    text-align: center;
+    text-shadow: 0 0 8px rgba(255, 255, 0, 0.4);
+}
+
+#statusUI {
+    position: absolute;
+    top: 54px;
+    left: 0;
+    z-index: 5;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0 40px;
+    pointer-events: none;
+}
+
+.status-indicator {
+    color: #4488ff;
+    font-size: 12px;
+    opacity: 0;
+    text-align: center;
+    text-shadow: 0 0 8px rgba(68, 136, 255, 0.5);
+    transition: opacity 0.3s;
+}
+
+.status-active {
+    opacity: 1;
+}
+
+#modeIndicator,
+#keyboardHint {
+    position: absolute;
+    left: 50%;
+    z-index: 5;
+    color: #777;
+    font-size: 12px;
+    pointer-events: none;
+    text-align: center;
+    transform: translateX(-50%);
+}
+
+#modeIndicator {
+    top: 72px;
+}
+
+#keyboardHint {
+    bottom: 78px;
+    color: #8a8a8a;
+}
+
+#skillBar {
+    position: absolute;
+    bottom: 18px;
+    left: 50%;
+    z-index: 10;
+    display: flex;
+    gap: 10px;
+    pointer-events: none;
+    transform: translateX(-50%);
+}
+
+.skill-chip {
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-rows: auto auto;
+    column-gap: 8px;
+    align-items: center;
+    min-width: 92px;
+    padding: 8px 10px;
+    color: #ddd;
+    background: rgba(12, 12, 12, 0.82);
+    border: 1px solid #333;
+    border-radius: 8px;
+    box-shadow: 0 0 12px rgba(0, 255, 255, 0.1);
+}
+
+.skill-chip kbd {
+    grid-row: 1 / 3;
+    min-width: 26px;
+    height: 26px;
+    padding: 4px 8px;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 18px;
+    text-align: center;
+    background: #181818;
+    border: 1px solid #555;
+    border-radius: 6px;
+}
+
+.skill-chip span {
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.skill-chip small {
+    color: #888;
+    font-size: 11px;
+}
+
+.skill-ready {
+    border-color: rgba(0, 255, 255, 0.45);
+}
+
+.skill-cooldown {
+    opacity: 0.55;
+}
+
+.skill-active {
+    border-color: #4488ff;
+    box-shadow: 0 0 18px rgba(68, 136, 255, 0.45);
+}
+
+#menu,
+#gameOver,
+#helpPanel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.94);
+}
+
+#menu h1 {
+    margin-bottom: 8px;
+    font-size: 36px;
+    letter-spacing: 4px;
+    text-shadow: 0 0 20px #00ffff;
+}
+
+#menu .subtitle {
+    margin-bottom: 18px;
+    color: #666;
+    font-size: 12px;
+}
+
+.menu-note {
+    margin-bottom: 24px;
+    color: #777;
+    font-size: 13px;
+}
+
+.menu-btn,
+.restart-btn,
+.close-btn {
+    cursor: pointer;
+    background: transparent;
+    border-radius: 8px;
+    transition: background 0.2s, color 0.2s, transform 0.2s;
+}
+
+.menu-btn {
+    width: 210px;
+    margin: 8px;
+    padding: 14px;
+    color: #fff;
+    font-size: 16px;
+    text-align: center;
+    border: 2px solid;
+}
+
+.menu-btn:hover,
+.restart-btn:hover,
+.close-btn:hover {
+    transform: translateY(-1px);
+}
+
+.menu-btn:active,
+.restart-btn:active,
+.close-btn:active {
+    transform: translateY(0) scale(0.98);
+}
+
+#btn-start {
+    color: #40ffaa;
+    border-color: #40ffaa;
+}
+
+#btn-start:hover {
+    color: #03160f;
+    background: #40ffaa;
+}
+
+#btn-team {
+    color: #ff4080;
+    border-color: #ff4080;
+}
+
+#btn-team:hover {
+    color: #19020a;
+    background: #ff4080;
+}
+
+#btn-help {
+    color: #00aaff;
+    border-color: #00aaff;
+    font-size: 14px;
+}
+
+#btn-help:hover {
+    color: #02131d;
+    background: #00aaff;
+}
+
+#gameOver {
+    display: none;
+    background: rgba(0, 0, 0, 0.92);
+}
+
+#winnerText {
+    margin-bottom: 10px;
+    font-size: 30px;
+    text-shadow: 0 0 20px currentColor;
+}
+
+#winReason {
+    margin-bottom: 25px;
+    color: #777;
+    font-size: 14px;
+}
+
+.restart-btn {
+    margin: 8px;
+    padding: 12px 35px;
+    color: #00ffff;
+    font-size: 18px;
+    border: 2px solid #00ffff;
+}
+
+.restart-btn:hover {
+    color: #000;
+    background: #00ffff;
+}
+
+.restart-btn-secondary {
+    color: #888;
+    border-color: #666;
+}
+
+.restart-btn-secondary:hover {
+    color: #111;
+    background: #888;
+}
+
+#helpPanel {
+    z-index: 200;
+    display: none;
+    justify-content: flex-start;
+    padding: 36px 20px;
+    overflow-y: auto;
+    background: rgba(0, 0, 0, 0.96);
+}
+
+.help-content {
+    width: 100%;
+    max-width: 540px;
+}
+
+.help-content h2 {
+    margin-bottom: 16px;
+    font-size: 22px;
+    text-align: center;
+}
+
+.help-item {
+    margin: 12px 0;
+    padding: 14px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid #222;
+    border-radius: 8px;
+}
+
+.help-title {
+    margin-bottom: 6px;
+    color: #00ffff;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.help-item div {
+    color: #aaa;
+    font-size: 13px;
+    line-height: 1.65;
+}
+
+.danger-text {
+    color: #ff6666;
+}
+
+.info-text {
+    color: #00ffff;
+}
+
+.close-btn {
+    margin-top: 20px;
+    padding: 10px 30px;
+    color: #fff;
+    font-size: 14px;
+    border: 1px solid #fff;
+}
+
+.close-btn:hover {
+    color: #000;
+    background: #fff;
+}
+
+@media (max-width: 760px) {
+    #ui {
+        padding: 10px;
+    }
+
+    .health-bar-container {
+        gap: 10px;
+    }
+
+    .player-info {
+        max-width: 160px;
+    }
+
+    #timer {
+        min-width: 48px;
+        font-size: 24px;
+    }
+
+    #skillBar {
+        flex-wrap: wrap;
+        justify-content: center;
+        width: min(96vw, 520px);
+    }
+
+    .skill-chip {
+        min-width: 86px;
+    }
+
+    #keyboardHint {
+        display: none;
+    }
+}

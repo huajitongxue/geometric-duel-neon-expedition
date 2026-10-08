@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#050914" />
+    <title>几何决斗：霓虹远征</title>
+    <link rel="stylesheet" href="css/roguelite.css" />
+</head>
+<body>
+    <canvas id="gameCanvas" width="960" height="540" aria-label="几何决斗：霓虹远征游戏画面"></canvas>
+    <section id="saveDialog" class="save-dialog" role="dialog" aria-modal="true" aria-labelledby="saveDialogTitle" hidden>
+        <div class="save-dialog__panel">
+            <h1 id="saveDialogTitle">存档管理</h1>
+            <textarea id="saveTransfer" spellcheck="false" aria-label="存档 JSON 文本"></textarea>
+            <div class="save-dialog__actions">
+                <button id="saveDialogApply" type="button">确认</button>
+                <button id="saveDialogClose" type="button">关闭</button>
+            </div>
+        </div>
+    </section>
+    <section id="keybindDialog" class="keybind-dialog" role="dialog" aria-modal="true" aria-live="polite" hidden>
+        <div class="keybind-dialog__panel">
+            <p id="keybindPrompt" class="keybind-dialog__prompt">选择一个你想要的按键</p>
+            <div id="keybindConfirmation" class="keybind-dialog__confirmation" hidden>
+                <p id="keybindConfirmationText"></p>
+                <div class="keybind-dialog__actions">
+                    <button id="keybindConfirm" type="button">确定</button>
+                    <button id="keybindCancel" type="button">取消</button>
+                </div>
+            </div>
+        </div>
+    </section>
+    <noscript>此游戏需要启用 JavaScript。</noscript>
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>
